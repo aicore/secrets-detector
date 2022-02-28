@@ -1,9 +1,31 @@
 
+/*
+ * GNU AGPL-3.0 License
+ *
+ * Copyright (c) 2021 - present core.ai . All rights reserved.
+ *
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU Affero General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License along
+ * with this program. If not, see https://opensource.org/licenses/AGPL-3.0.
+ *
+ */
+
+// jshint ignore: start
+/*global describe, it*/
+
 import * as chai from 'chai';
 import * as parser from 'gitignore-parser';
 import * as fs from 'fs';
 import * as lineReader from 'line-reader';
-import('mocha');
+import 'mocha';
+
 var gitignore = parser.compile(fs.readFileSync('.gitignore', 'utf8'));
 
 let expect = chai.expect;
@@ -28,8 +50,8 @@ for(let i=0;i<newfiles.length;i++){
     let ret=newfiles[i].replace('./','');
     newfiles[i]=ret;
 }
-console.log("accepts");
-console.log(newfiles.filter(gitignore.accepts));
+//console.log("accepts");
+//console.log(newfiles.filter(gitignore.accepts));
 function strip(string) {
     return string.replace(/^\s+|\s+$/g, '');
 }
@@ -66,32 +88,38 @@ function rule(key,value){
         "        |ventrilo-srv.ini|muttrc|trc|ovpn|dayone|tugboat\n" +
         "      )$'");
     var val_regex8=new RegExp("(http|ftp|smtp|scp|ssh|jdbc[:\\w\\d]*|s3)s?://?.+");
+    var val_regex9=new RegExp("^(gh[pous]_[a-zA-Z0-9]{36}|ghr_[a-zA-Z0-9]{76})$");
+    var key_regex10=new RegExp("^htpasswd Hash$");
+    var key_regex11=new RegExp("^htpasswd Hash$");
+    var val_regex12=new RegExp("^((([A-Z]|file|root):)?(\\.+)?[/\\\\]+).*$");
+    var val_regex13=new RegExp(".*[\\-]{3,}BEGIN (RSA|DSA|EC|OPENSSH|PRIVATE)? ?(PRIVATE)? KEY[\\-]{3,}.*");
+
     if (key_regex1.test(key) && val_regex1.test(value)) {
-        console.log("Secret key-value found");
+        console.log("Secret key-value pair found");
         return true;
     }
     if(key_regex2.test(key) && val_regex2.test(value)){
-        console.log("Secret key-value found");
+        console.log("Secret key-value pair found");
         return true;
     }
     if(key_regex3.test(key) && val_regex3.test(value)){
-        console.log("Secret key-value found");
+        console.log("Secret key-value pairfound");
         return true;
     }
     if(key_regex4.test(key) && val_regex4.test(value)){
-        console.log("Secret key-value found");
+        console.log("Secret key-value pair found");
         return  true;
     }
     if(key_regex7.test(key) && val_regex7.test(value)){
-        console.log("Secret key-value found");
+        console.log("Secret key-value pair found");
         return  true;
     }
-    if(key_regex5.test(key) || key_regex6.test(key)){
+    if(key_regex5.test(key) || key_regex6.test(key) || key_regex10.test(key) || key_regex11.test(key)){
         console.log("Secret key found");
         return true;
     }
-    if(val_regex8.test(value)){
-        console.log("Secret uri found");
+    if(val_regex8.test(value) || val_regex9.test(value) || val_regex12.test(value) || val_regex13.test(value)){
+        console.log("Secret value found");
         return true;
     }
     return false;
@@ -103,7 +131,7 @@ try {
             let ext=newfiles[i].split(".")[1];
             lineReader.eachLine(newfiles[i],function (line,last){
                 //console.log(line);
-                if(ext=='js'){
+                if(ext==='js'){
                     if(line.match(/=/g)===1){
                         let key,value=line.split("=");
                         key=strip(key);
@@ -116,25 +144,25 @@ try {
                         });
                     }
                 }
-                if(ext=='yml'){
+                if(ext==='yml'){
 
                 }
-                if(ext=='xml'){
+                if(ext==='xml'){
 
                 }
-                if(ext=='shell'){
+                if(ext==='shell'){
 
                 }
-                if(ext=='json'){
+                if(ext==='json'){
 
                 }
-                if(ext=='html'){
+                if(ext==='html'){
 
                 }
                 if(last){
 
                 }
-            })
+            });
         }
     });
 
