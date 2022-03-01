@@ -48,7 +48,6 @@
     "mocha": "9.2.1"
   },
   "dependencies": {
-    "fs": "0.0.1-security",
     "gitignore-parser": "0.0.2",
     "line-reader": "^0.4.0"
   }
