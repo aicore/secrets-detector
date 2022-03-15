@@ -2,7 +2,10 @@
   "name": "@aicore/template-nodejs",
   "version": "1.0.1",
   "description": "Template for nodejs with unit gulp build, test, coverage, code guardian, github and Other defaults",
-  "main": "index.js",
+  "main": "bin/index.js",
+  "bin": {
+    "secrets-scanner": "./bin/index.js"
+  },
   "type": "module",
   "keywords": [
     "template",
@@ -49,6 +52,7 @@
   },
   "dependencies": {
     "gitignore-parser": "0.0.2",
-    "line-reader": "^0.4.0"
+    "line-reader": "^0.4.0",
+    "yargs": "^17.3.1"
   }
 }
