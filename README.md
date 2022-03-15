@@ -1,51 +1,114 @@
-# template-nodejs
-A template project for nodejs. Has integrated linting, testing,
-coverage, reporting, GitGub actions for publishing to npm repository, dependency updates and other goodies.
+# Secrets-scanner
+Secrets detector is a tool that finds secrets like AWS keys, API secrets, and tokens. It does so by looking at all the files in the current folder and attempting to match them against a list of secret signatures.
 
-Easily use this template to quick start a production ready nodejs project template.
+Secrets scanner is a stand-alone package written purely in node-js and does not have any dependency on python or other secret scanner utilities.
 
-## Code Guardian
-[![<app> build verification](https://github.com/aicore/template-nodejs/actions/workflows/build_verify.yml/badge.svg)](https://github.com/aicore/template-nodejs/actions/workflows/build_verify.yml)
+## How to install
+To install the secrets scanner globally, run the following command in the terminal.
 
-<a href="https://sonarcloud.io/summary/new_code?id=aicore_template-nodejs-ts">
-  <img src="https://sonarcloud.io/api/project_badges/measure?project=aicore_template-nodejs-ts&metric=alert_status" alt="Sonar code quality check" />
-  <img src="https://sonarcloud.io/api/project_badges/measure?project=aicore_template-nodejs-ts&metric=security_rating" alt="Security rating" />
-  <img src="https://sonarcloud.io/api/project_badges/measure?project=aicore_template-nodejs-ts&metric=vulnerabilities" alt="vulnerabilities" />
-  <img src="https://sonarcloud.io/api/project_badges/measure?project=aicore_template-nodejs-ts&metric=coverage" alt="Code Coverage" />
-  <img src="https://sonarcloud.io/api/project_badges/measure?project=aicore_template-nodejs-ts&metric=bugs" alt="Code Bugs" />
-  <img src="https://sonarcloud.io/api/project_badges/measure?project=aicore_template-nodejs-ts&metric=reliability_rating" alt="Reliability Rating" />
-  <img src="https://sonarcloud.io/api/project_badges/measure?project=aicore_template-nodejs-ts&metric=sqale_rating" alt="Maintainability Rating" />
-  <img src="https://sonarcloud.io/api/project_badges/measure?project=aicore_template-nodejs-ts&metric=ncloc" alt="Lines of Code" />
-  <img src="https://sonarcloud.io/api/project_badges/measure?project=aicore_template-nodejs-ts&metric=sqale_index" alt="Technical debt" />
-</a>
-
-
-# TODOs after template use
-1. Update package.json with your app defaults
-2. Check Build actions on pull requests.
-3. In sonar cloud, enable Automatic analysis from `Administration
-   Analysis Method` for the first time before a pull request is raised: ![image](https://user-images.githubusercontent.com/5336369/148695840-65585d04-5e59-450b-8794-54ca3c62b9fe.png)
-4. Check codacy runs on pull requests, set codacy defaults. You may remove codacy if sonar cloud is only needed.
-5. Update the above Code Guardian badges; change all `id=aicore_template-nodejs-ts` to the sonar id of your project fields.
-
-# Commands available
-
-## Building
-Since this is a pure JS template project, build command just runs test with coverage.
 ```shell
-> npm install   // do this only once.
-> npm run build
+npm install -g secrets-scanner
+```
+If you have to install it as a development time utility.
+```shell
+npm install --save-dev secrets-scanner
 ```
 
-## Linting
-To lint the files in the project, run the following command:
+# How to execute
+To execute the secrets scanning tool on a specific folder, run the following command in the terminal:
 ```shell
-> npm run lint
+secrets-scanner
 ```
-To Automatically fix lint errors:
+* The scanner will check for secrets in all files in the current folder recursively.
+
+* The scanner will honor and ignore all files specified in .gitignore file.
+  On completion, the command will succeed if it did not find any secrets.
+
+If any secrets are detected, the command will exit with -1 and the offending secrets will be displayed:
 ```shell
-> npm run lint:fix
+secrets-scanner
+Error! Secrets Detected in the following files:
+src/a.json, line 32, col 21: password: pass
+test/a.html, line 2, col 1: awsaccesskey: 23
 ```
+
+# Ignoring false positives
+Sometimes, the secret scanner may flag a line as offending, but it might be an essential component of code. In such cases, we can selectively specify secret scanner to ignore a specific line by placing a comment secrets-ignore above the offending line.
+
+For eg. In a file below test.js , password=”pass” can be ignored by adding a line comment above the code as follows:
+```shell
+...
+function test(){
+  //secrets-ignore
+  let password = "pass";
+  ...
+}
+...
+```
+## Other Languages
+```shell
+For python, bash:
+
+#secrets-ignore
+password="pass"
+
+HTML:
+<!-- secrets-ignore -->
+password="pass"
+
+CSS:
+/* secrets-ignore */
+
+JSON:
+use additional configuration file below to exclude json keys from secret scanner.
+
+```
+
+## Additional configuration
+Create a file secrets-scanner.json to specify additional configuration options.  The configuration options are listed below:
+```shell
+{
+ "version": 1,
+ "gitIgnore": [true|false], // weather to honor git-ignore or not.
+ "jsonIgnore": {
+   // https://stackoverflow.com/questions/8481380/is-there-a-json-equivalent-of-xquery-xpath
+   "<file path1>": ["<jsonpath of key 1>", "jsonpath of key 2"...]
+ }
+}
+```
+
+## jsonIgnore
+Since JSON does not support inline comments to ignore false positives, the configuration file can be used to ignore specific json keys. For example, consider the following json files:
+```shell
+// a.json
+{"login":{
+   "pass": "pass"
+}}
+// src/b.json
+{"login":{
+   "user":{"pass": "pass"}
+}}
+```
+The secrets can be whitelisted using the following  secrets-scanner.json configuration file:
+```shell
+{
+ "version": 1,
+ "gitIgnore": [true|false], // weather to honor git-ignore or not.
+ "jsonIgnore": {
+   "a.json": ["login.pass"],
+   "src/b.json": ["login.user.pass"]
+ }
+}
+```
+
+## Supported languages
+The following language files will be scanned for secrets:
+```shell
+1.HTML
+2.JS
+```
+## Development notes
+This section is relevant only if you are developing or making changes to the secrets-scanner itself.
 
 ## Testing
 To run all tests:
@@ -56,13 +119,11 @@ To run all tests:
     #indexOf()
       ✔ should return -1 when the value is not present
 ```
-
 Additionally, to run unit/integration tests only, use the commands:
 ```shell
 > npm run test:unit
 > npm run test:integ
 ```
-
 ## Coverage Reports
 To run all tests with coverage:
 
@@ -108,57 +169,3 @@ Sample coverage report:
 Unit and integration test coverage settings can be updated by configs `.nycrc.unit.json` and `.nycrc.integration.json`.
 
 See https://github.com/istanbuljs/nyc for config options.
-
-# Publishing packages to NPM
-To publish a package to npm, push contents to `npm` branch in 
-this repository. 
-
-## Publishing `@aicore/package*`
-If you are looking to publish to package owned by core.ai, you will need access to the GitHub Organization secret `NPM_TOKEN`.
-
-For repos managed by [aicore](https://github.com/aicore) org in GitHub, Please contact your Admin to get access to core.ai's NPM tokens.
-
-
-## Publishing to your own npm account
-Alternatively, if you want to publish the package to your own npm account, please follow these docs:
-1. Create an automation access token by following this [link](https://docs.npmjs.com/creating-and-viewing-access-tokens).
-2. Add NPM_TOKEN to your repository secret by following this [link](https://docs.npmjs.com/using-private-packages-in-a-ci-cd-workflow)
-
-To edit the publishing workflow, please see file: `.github/workflows/npm-publish.yml`
-
-
-# Dependency updates
-  We use Rennovate for dependency updates: https://blog.logrocket.com/renovate-dependency-updates-on-steroids/
-  * By default, dep updates happen on sunday every week.
-  * The status of dependency updates can be viewed here if you have this repo permissions in github: https://app.renovatebot.com/dashboard#github/aicore/template-nodejs
-  * To edit rennovate options, edit the rennovate.json file in root, see https://docs.renovatebot.com/configuration-options/
-  Refer 
-  
-# Code Guardian
-Several automated workflows that check code integrity are integrated into this template.
-These include:
-1. GitHub actions that runs build/test/coverage flows when a contributor raises a pull request
-2. [Sonar cloud](https://sonarcloud.io/) integration using `.sonarcloud.properties`
-   1. In sonar cloud, enable Automatic analysis from `Administration
-      Analysis Method` for the first time ![image](https://user-images.githubusercontent.com/5336369/148695840-65585d04-5e59-450b-8794-54ca3c62b9fe.png)
-
-## IDE setup
-SonarLint is currently available as a free plugin for jetbrains, eclipse, vscode and visual studio IDEs.
-Use sonarLint plugin for webstorm or any of the available
-IDEs from this link before raising a pull request: https://www.sonarlint.org/ .
-
-SonarLint static code analysis checker is not yet available as a Brackets
-extension.
-
-## Internals
-### Testing framework: Mocha , assertion style: chai
- See https://mochajs.org/#getting-started on how to write tests
- Use chai for BDD style assertions (expect, should etc..). See move here: https://www.chaijs.com/guide/styles/#expect
-
-### Mocks and spies: sinon
- if you want to mock/spy on fn() for unit tests, use sinon. refer docs: https://sinonjs.org/
-
-### Note on coverage suite used here:
-we use c8 for coverage https://github.com/bcoe/c8. Its reporting is based on nyc, so detailed docs can be found
- here: https://github.com/istanbuljs/nyc ; We didn't use nyc as it do not yet have ES module support
- see: https://github.com/digitalbazaar/bedrock-test/issues/16 . c8 is drop replacement for nyc coverage reporting tool
