@@ -1,0 +1,34 @@
+{
+  "aws-id": {
+    "description": "Values formatted like AWS Access Key ID",
+    "message": "AWS Access Key ID",
+    "severity": "BLOCKER",
+    "value": {
+      "regex": "^(?=.*[A-Z])(?=.*[0-9])A(AG|CC|GP|ID|IP|KI|NP|NV|PK|RO|SC|SI)A[A-Z0-9]{16}$",
+      "ignorecase": false
+    }
+  },
+  "aws-secret": {
+    "description": "Values formatted like AWS Secret Access Key",
+    "message": "AWS Secret Access Key",
+    "severity": "BLOCKER",
+    "key": {
+      "regex": "^(?!.*name)",
+      "ignorecase": true
+    },
+    "value": {
+      "regex": "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])[A-Za-z0-9\\+\\/]{40}$",
+      "ignorecase": false
+    }
+  },
+  "aws-token": {
+    "description": "Values formatted like AWS Session Token",
+    "message": "AWS Session Token",
+    "severity": "BLOCKER",
+    "value": {
+      "regex": "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])[A-Za-z0-9\\+\\/]{270,450}$",
+      "ignorecase": false,
+      "isBase64": true
+    }
+  }
+}

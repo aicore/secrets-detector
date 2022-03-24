@@ -1,0 +1,16 @@
+{
+  "dockercfg": {
+    "description": "Hardcoded .dockercfg auth",
+    "message": "Dockercfg",
+    "severity": "CRITICAL",
+    "key": {
+      "regex": "^Dockercfg$",
+      "ignorecase": false
+    },
+    "value": {
+      "isBase64": true,
+      "isAscii": true,
+      "minlen": 1
+    }
+  }
+}

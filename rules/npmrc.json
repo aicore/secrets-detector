@@ -1,0 +1,14 @@
+{
+  "npmrc": {
+    "description": "Hardcoded .npmrc authToken",
+    "message": ".npmrc authToken",
+    "severity": "CRITICAL",
+    "key": {
+      "regex": "^npm authToken$",
+      "ignorecase": false
+    },
+    "value": {
+      "minlen": 1
+    }
+  }
+}

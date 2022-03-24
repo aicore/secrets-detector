@@ -1,0 +1,12 @@
+{
+  "comments": {
+    "description": "Potential information leak through comments",
+    "message": "Comment",
+    "severity": "MINOR",
+    "key": {
+      "regex": "^comment$",
+      "ignorecase": false,
+      "minlen": 1
+    }
+  }
+}
