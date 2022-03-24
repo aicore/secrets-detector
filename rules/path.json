@@ -1,0 +1,11 @@
+{
+  "path": {
+    "description": "Text containing a system or network path",
+    "message": "Path",
+    "severity": "INFO",
+    "value": {
+      "regex": "^((([A-Z]|file|root):)?(\\.+)?[/\\\\]+).*$",
+      "ignorecase": true
+    }
+  }
+}

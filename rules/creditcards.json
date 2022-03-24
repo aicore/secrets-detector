@@ -1,0 +1,12 @@
+{
+  "creditcards": {
+    "description": "Potential credit card number",
+    "message": "Credit Card",
+    "severity": "MAJOR",
+    "value": {
+      "regex": "^[0-9]{14,}$",
+      "ignorecase": false,
+      "isLuhn": true
+    }
+  }
+}
