@@ -71,6 +71,7 @@ for(let i=0;i<newfiles.length;i++){
 }
 //console.log("accepts");
 //console.log(newfiles.filter(gitignore.accepts));
+//to strip leading and trailing spaces
 function strip(string) {
     return string.replace(/^\s+|\s+$/g, '');
 }
