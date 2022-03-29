@@ -8,5 +8,5 @@ jsonsInDir.forEach(file => {
     const json = JSON.parse(fileData.toString());
     allRules.push(json);
 });
-console.log(allRules.length);
+
 export default allRules;
