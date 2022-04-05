@@ -22,12 +22,16 @@
 
 import * as chai from 'chai';
 let expect=chai.expect;
-import {default as allRules} from '../../src/rules/allRules.js'
+import {default as allRules} from '../../src/rules/allRules.js';
 import 'mocha';
+import * as fs from 'fs';
+import path from 'path';
+
 describe('unit Test for rules', function (){
-          it('check for rules ', function () {
-              expect(allRules.length).to.be.equal(20);
-          });
-        }
+    it('check for rules ', function () {
+    expect(allRules.length).to.be.equal(20);
+    });
+
+}
 );
 
