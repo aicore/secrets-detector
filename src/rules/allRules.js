@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import path from 'src/rules/path.json';
+import path from 'path';
 
 const jsonsInDir = fs.readdirSync('./src/rules').filter(file => path.extname(file) === '.json');
 let allRules=[];
