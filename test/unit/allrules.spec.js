@@ -24,14 +24,15 @@ import * as chai from 'chai';
 let expect=chai.expect;
 import {default as allRules} from '../../src/rules/allRules.js';
 
+import 'mocha';
 
 const subkeys=new Set();
-for(var index in allRules){
-    //var key = index;
-    var val = allRules[index];
-    for(var sub_key in val){
-        //var sub_key = j;
-        //var sub_val = val[j];
+for(var i in allRules){
+    var key = i;
+    var val = allRules[i];
+    for(var j in val){
+        var sub_key = j;
+        var sub_val = val[j];
         subkeys.add(sub_key);
     }
 }
