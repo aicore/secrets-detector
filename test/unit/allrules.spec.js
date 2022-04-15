@@ -23,6 +23,7 @@
 import * as chai from 'chai';
 let expect=chai.expect;
 import {default as allRules} from '../../src/rules/allRules.js';
+
 import 'mocha';
 
 const subkeys=new Set();

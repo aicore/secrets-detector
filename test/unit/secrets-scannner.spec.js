@@ -24,7 +24,7 @@ import * as chai from 'chai';
 import * as parser from 'gitignore-parser';
 import * as fs from 'fs';
 import * as lineReader from 'line-reader';
-import 'mocha';
+
 
 var gitignore = parser.compile(fs.readFileSync('.gitignore', 'utf8'));
 
