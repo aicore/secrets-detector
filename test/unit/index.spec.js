@@ -22,9 +22,13 @@
 
 import * as chai from 'chai';
 let expect=chai.expect;
-import allRules from "../../src/index.js";
+import {allRules} from "../../src/index.js";
+import {flag} from "../../src/index.js";
 describe('check wether index js works fine or not',function (){
-    it('should ', function () {
+    it('should be equal to 20', function () {
         expect(allRules.length).to.be.equal(20);
+    });
+    it('flag should be true',function(){
+        expect(flag).to.be.equal(true);
     });
 });
