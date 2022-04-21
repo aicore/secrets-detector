@@ -82,7 +82,7 @@ try {
     console.error(err);
 }
 try {
-    let flag=false;
+    var flag=true;
     for(let i=0;i<newfiles.length;i++){
         let ext=newfiles[i].split(".")[1];
         lineReader.eachLine(newfiles[i],function (line,last){
@@ -96,38 +96,18 @@ try {
                     let result=rule(key,value);
                     //here commits should fail
                     if(result===false){
-                        flag=true;
-                    }
-                    else{
-                        process.exit(true);
+                        flag=false;
+                        process.exit(1);
                     }
                 }
             }
-            if(ext==='yml'){
-
-            }
-            if(ext==='xml'){
-
-            }
-            if(ext==='shell'){
-
-            }
-            if(ext==='json'){
-
-            }
-            if(ext==='html'){
-
-            }
-            if(last){
-
-            }
         });
     }
-    if(flag===false){
+    if(flag===true){
         console.log("No secrets found");
     }
 } catch (err) {
     console.error(err);
 }
 
-export default allRules;
+export {allRules,flag};
