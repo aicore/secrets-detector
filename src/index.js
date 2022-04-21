@@ -26,7 +26,42 @@ function strip(string) {
     return string.replace(/^\s+|\s+$/g, '');
 }
 function rule(key,value){
-
+    for(var i in allRules){
+        var key = i;
+        var val = allRules[i];
+        for(var j in val){
+            //var sub_key = j;
+            var sub_val = val[j];
+            for(var k in sub_val){
+                console.log("k is ",k);
+                var key_regex_str=null;
+                var val_regex_str=null;
+                if(k==='key'){
+                    key_regex_str=sub_val.key.regex;
+                }
+                if(k==='value'){
+                    val_regex_str=sub_val.value.regex;
+                }
+                var key_regex_obj=null;
+                var val_regex_obj=null;
+                if(key_regex_str!=null){
+                    key_regex_obj=new RegExp(key_regex_str);
+                }
+                if(val_regex_str!=null){
+                    val_regex_obj=new RegExp(val_regex_str);
+                }
+                if(key_regex_obj!=null && key_regex_obj.test(key)){
+                    console.log("secret key found");
+                    return false;
+                }
+                if(val_regex_obj!=null && val_regex_obj.test(key)){
+                    console.log("secret value found");
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
 }
 
 try {
@@ -42,7 +77,6 @@ try {
         newfiles=obj;
     } else {
         console.log("gitignore does not exist, scanning on all the files...");
-
     }
 } catch(err) {
     console.error(err);
@@ -63,7 +97,9 @@ try {
                     //here commits should fail
                     if(result===false){
                         flag=true;
-                        console.log("secret-key found");
+                    }
+                    else{
+                        process.exit(true);
                     }
                 }
             }
