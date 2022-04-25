@@ -101,6 +101,20 @@ try {
                     }
                 }
             }
+            if(ext==='config'){
+                if(line.match(/=/g)===1){
+                    let key,value=line.split("=");
+                    key=strip(key);
+                    value=value.replace(";", "");
+                    value=strip(value);
+                    let result=rule(key,value);
+                    //here commits should fail
+                    if(result===false){
+                        flag=false;
+                        process.exit(1);
+                    }
+                }
+            }
         });
     }
     if(flag===true){
