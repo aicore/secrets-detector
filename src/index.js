@@ -115,6 +115,20 @@ try {
                     }
                 }
             }
+            if(ext==='npmrc'){
+                if(line.match(/:_authtoken/g)===1){
+                    let key,value=line.split(":_authtoken=");
+                    key=strip(key);
+                    value=value.replace(";", "");
+                    value=strip(value);
+                    //here commit should fail
+                    if(value){
+                        console.log("npm auth token ",value);
+                        flag=false;
+                        process.exit(1);
+                    }
+                }
+            }
         });
     }
     if(flag===true){
