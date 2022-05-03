@@ -2,6 +2,7 @@ import allRules from "./rules/allRules.js";
 import * as parser from 'gitignore-parser';
 import * as fs from 'fs';
 import * as lineReader from 'line-reader';
+import {json} from "mocha/lib/reporters/index.js";
 
 const path = process.cwd()+"/.gitignore";
 console.log("cwd ", path);
@@ -83,6 +84,7 @@ try {
 }
 try {
     var flag=true;
+    var document="";
     for(let i=0;i<newfiles.length;i++){
         let ext=newfiles[i].split(".")[1];
         lineReader.eachLine(newfiles[i],function (line,last){
@@ -129,7 +131,23 @@ try {
                     }
                 }
             }
+            if(ext==='json'){
+                if(line.startsWith("//")==true){
+                }
+                else{
+                    String.prototype.replace(" // ?.*$","",line);
+                    document+=line;
+                }
+            }
         });
+    }
+    if(document.length>0){
+        try{
+            document=json.load(document);
+        }
+        catch (e){
+            console.log(e);
+        }
     }
     if(flag===true){
         console.log("No secrets found");
