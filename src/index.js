@@ -132,10 +132,10 @@ try {
                 }
             }
             if(ext==='json'){
-                if(line.startsWith("//")==true){
+                if(line.startsWith("//")===true){
                 }
                 else{
-                    String.prototype.replace(" // ?.*$","",line);
+                    line=String.prototype.replace(" // ?.*$","",line);
                     document+=line;
                 }
             }
